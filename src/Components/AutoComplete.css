@@ -1,0 +1,23 @@
+.search{
+    position: absolute;
+    top:20%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+.list-item-style{
+    display: flex;
+}
+span{
+    margin-left: 20px;
+}
+.text-container {
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+  }
+.clearBtn {
+    position: absolute;
+    top: 0;
+    right: -15px;
+    transition: right 0.2s;
+  }
