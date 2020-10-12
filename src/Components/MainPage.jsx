@@ -1,36 +1,80 @@
 import React, { Component } from 'react';
-import AutoComplete from './AutoComplete';
-const countries = [
-    { "Name": "Australia", "Code": "AU" },
-       { "Name": "Bermuda", "Code": "BM" },
-       { "Name": "Canada", "Code": "CA" },
-       { "Name": "Cameroon", "Code": "CM" },
-       { "Name": "Denmark", "Code": "DK" },
-       { "Name": "France", "Code": "FR" },
-       { "Name": "Finland", "Code": "FI" },
-       { "Name": "Germany", "Code": "DE" },
-       { "Name": "Greenland", "Code": "GL" },
-       { "Name": "Hong Kong", "Code": "HK" },
-       { "Name": "India", "Code": "IN" },
-       { "Name": "Italy", "Code": "IT" },
-       { "Name": "Japan", "Code": "JP" },
-       { "Name": "Mexico", "Code": "MX" },
-       { "Name": "Norway", "Code": "NO" },
-       { "Name": "Poland", "Code": "PL" },
-       { "Name": "Switzerland", "Code": "CH" },
-       { "Name": "United Kingdom", "Code": "GB" },
-       { "Name": "United States", "Code": "US" }
+import './MainPage.css';
+const options = [
+  'apple', 'orange', 'peach'
 ];
-
-
 class MainPage extends Component {
-  render() {
+  constructor(props) {
+    super(props)
+    this.state = {
+      suggestions: [],
+      text: ''
+    }
+  }
+
+  handleChange = (event) => {
+    const value = event.target.value;
+    let suggestions = [];
+    if (value.length > 0) {
+      suggestions = options.filter(
+        (option) => option.toLowerCase().indexOf(value.toLowerCase()) > -1
+      );
+    }
+    this.setState(() => ({
+      suggestions,
+      text: value
+    }))
+  }
+
+  selectedText(value) {
+    this.setState(() => ({
+      text: value,
+      suggestions: [],
+    }))
+  }
+
+  onDelete() {
+    this.setState({
+      text: '',
+      suggestions: []
+    })
+  }
+
+  getAllSuggestions = () => {
+    let { suggestions } = this.state;
+    if (suggestions.length === 0) {
+      return null;
+    }
     return (
-      <div>
-        <AutoComplete options={countries}/>
+      <ul >
+        {
+          suggestions.map((item, index) => (<div className="list-item-style">
+            <li key={index} onClick={() => this.selectedText(item)}>{item}</li>
+            <span onClick={() => this.onDelete(item)}>x</span>
+          </div>))
+        }
+      </ul>
+    );
+  }
+
+  onErase = (event) => {
+    event.target.value = '';
+  }
+
+  render() {
+    const { text } = this.state;
+    return (
+      <div className="search">
+        <h1>Autocomplete</h1>
+        <div className="text-container">
+          <input type="text" onChange={this.handleChange} value={text} onClick={this.onErase} />
+        </div>
+
+        {this.getAllSuggestions()}
+
       </div>
     );
   }
 }
 
-export default  MainPage;
+export default MainPage;
